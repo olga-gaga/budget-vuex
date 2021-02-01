@@ -3,9 +3,9 @@
         <i :class="icon"></i>
         <span class="budget-comment"> {{ item.comment }} </span>
         <span class="budget-value" :class="color"> {{ item.value }} </span>
-        <ElButton type="danger" size="mini" @click="dialogVisible=true">Delete</ElButton>
+        <ElButton type="danger" size="mini" @click="onDeleteClick">Delete</ElButton>
         
-        <ElDialog :visible.sync="dialogVisible" width="30%" >
+        <ElDialog :visible.sync="visible" width="30%" >
             <span>Are you sure you want to delete the item{{ comment }}?</span>
             <span slot="footer" class="dialog-footer">
                 <ElButton @click="onConfirmClick" value="false">Cancel</ElButton>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from "vuex";
+
 export default {
     name: "BudgetListItem",
     components: {
@@ -29,22 +31,11 @@ export default {
         }
     },
     data: () => ({
-        dialogVisible: false,
+        //dialogVisible: this.visible,
     }),
-    methods: {
-        confirm() {
-            this.visible = true;
-        },
-        onConfirmClick(e) {
-            
-            const button = e.target.closest('button');
-            if(button && button.value === "true"){
-                this.$emit("deleteItem", this.item.id);
-            }
-            this.dialogVisible = false;
-        },
-    },
     computed: {
+        ...mapGetters("styleStorage", ["visible"]),
+        
         color:  {
            get(){
                return this.changeStyle(this.item.value);
@@ -66,7 +57,23 @@ export default {
                 return "";
             }
         },
-    }
+    },
+    methods: {
+        ...mapActions("styleStorage", ["changeVisible"]),
+        onDeleteClick() {
+            this.changeVisible(true);
+        },
+        onConfirmClick(e) {
+            
+            const button = e.target.closest('button');
+            if(button && button.value === "true"){
+                this.$emit("deleteItem", this.item.id);
+            }
+            //this.dialogVisible = false;
+            this.changeVisible(false);
+        },
+    },
+    
 }
 </script>
 

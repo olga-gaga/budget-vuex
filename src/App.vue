@@ -2,11 +2,12 @@
   <div id="app">
     <Form @submitForm="onFormSubmit"/>
     <TotalBalance :changeStyle="changeStyle" :total="totalBalance" />
-    <BudgetList :changeStyle="changeStyle" :list="list" @onDeleteItem="deleteItem"/>
+    <BudgetList :changeStyle="changeStyle" :list="budgetList" @onDeleteItem="deleteItem"/>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import BudgetList from '@/components/BudgetList.vue';
 import TotalBalance from '@/components/TotalBalance.vue';
 import Form from '@/components/Form.vue';
@@ -17,46 +18,19 @@ export default {
     TotalBalance,
     Form,
   },
-  data: () => ({
-    type: "all",
-    list: {
-      1: {
-        type: "INCOME",
-        value: 100,
-        comment: "Some comment",
-        id: 1,
-      },
-      2: {
-        type: "OUTCOME",
-        value: -50,
-        comment: "Some outcome comment",
-        id: 2,
-      },
-    },
-    
-  }),
   computed: {
-    totalBalance() {
-      return Object.values(this.list).reduce( (acc, item) => (acc + item.value), 0);
-    },
-    
+    ...mapGetters('balance', ["budgetList", "totalBalance"]),
   },
   methods: {
-    onFormSubmit(data){
-      const newObj = {
-        ...data, 
-        id: String(Math.random()),
-      };
-      newObj.value = this.checkValue(newObj);
-      this.$set(this.list, newObj.id, newObj);
+    ...mapActions('balance', ["addNewUser", "deleteUser"]),
+   onFormSubmit(data){
+      this.addNewUser(data);
     },
-    
-    checkValue({type, value}){
-        if ((type === "INCOME" && value < 0) || (type === "OUTCOME" && value > 0 )){
-          return value *= -1;
-        }
-        return value;
+
+    deleteItem(id) {
+      this.deleteUser(id);
     },
+
     changeStyle(value = 0) {
       if (value > 0) {
         return "green";
@@ -66,11 +40,8 @@ export default {
       }
       return "black";
     },
-    deleteItem(id) {
-      this.$delete(this.list, id);
-    },
-    }, 
-  }
+  }, 
+}
 </script>
 
 <style>

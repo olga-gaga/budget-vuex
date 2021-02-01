@@ -6,7 +6,7 @@
                 <SortButton @onChangeType="changeType" />
             </div>
             <template v-if="!isEmpty">
-                <BudgetListItem v-for="(item, prop) in sortedList" :key="prop" :item="item" :changeStyle="changeStyle" @deleteItem="onDeleteItem" />
+                <BudgetListItem v-for="item in sortedList" :key="item.id" :item="item" :changeStyle="changeStyle" @deleteItem="onDeleteItem" />
             </template>
             <ElAlert v-else type="info" :title="emptyTitle" :closable="false"/>
         </ElCard>
@@ -24,7 +24,7 @@ export default {
     },
     props: {
         list: {
-            type: Object,
+            type: Array,
             default: () => ({}),
         }, 
         changeStyle: {
@@ -38,7 +38,7 @@ export default {
     }),
     computed: {
         isEmpty() {
-            return !Object.keys(this.list).length;
+            return !this.list.length;
         },
         sortedList: {
             get(){
@@ -46,7 +46,7 @@ export default {
                     return this.list;
                 }
   
-                return Object.values(this.list).reduce( (acc, element) => {
+                return this.list.reduce( (acc, element) => {
                     if (element.type === this.type) {
                         acc[element.id] = element;
                     }
