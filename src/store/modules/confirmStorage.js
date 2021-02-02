@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-const styleStorage = {
+const consirmStorage = {
     namespaced: true,
     state: {
         dialogVisible: false,
@@ -22,4 +22,4 @@ const styleStorage = {
     }
 };
 
-export default styleStorage;
+export default consirmStorage;

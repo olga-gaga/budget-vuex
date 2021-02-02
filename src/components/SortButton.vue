@@ -16,7 +16,7 @@ export default {
         onClick(e) {
             const button = e.target.closest('button')
             this.type = button.value || "all";
-            this.$emit('onChangeType', this.type);
+            this.$emit('changeType', this.type);
         }
     }
 }

@@ -1,22 +1,15 @@
 <template>
-    <div class="list-item">
+    <div class="list-item" >
         <i :class="icon"></i>
         <span class="budget-comment"> {{ item.comment }} </span>
         <span class="budget-value" :class="color"> {{ item.value }} </span>
         <ElButton type="danger" size="mini" @click="onDeleteClick">Delete</ElButton>
-        
-        <ElDialog :visible.sync="visible" width="30%" >
-            <span>Are you sure you want to delete the item{{ comment }}?</span>
-            <span slot="footer" class="dialog-footer">
-                <ElButton @click="onConfirmClick" value="false">Cancel</ElButton>
-                <ElButton type="primary" @click="onConfirmClick" value="true">Confirm</ElButton>
-            </span>
-        </ElDialog>
+
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapActions } from "vuex";
 
 export default {
     name: "BudgetListItem",
@@ -30,12 +23,7 @@ export default {
             type: Function,
         }
     },
-    data: () => ({
-        //dialogVisible: this.visible,
-    }),
     computed: {
-        ...mapGetters("styleStorage", ["visible"]),
-        
         color:  {
            get(){
                return this.changeStyle(this.item.value);
@@ -59,18 +47,10 @@ export default {
         },
     },
     methods: {
-        ...mapActions("styleStorage", ["changeVisible"]),
+        ...mapActions("confirm", ["changeVisible"]),
         onDeleteClick() {
+            this.$emit("getItem", this.item);
             this.changeVisible(true);
-        },
-        onConfirmClick(e) {
-            
-            const button = e.target.closest('button');
-            if(button && button.value === "true"){
-                this.$emit("deleteItem", this.item.id);
-            }
-            //this.dialogVisible = false;
-            this.changeVisible(false);
         },
     },
     
