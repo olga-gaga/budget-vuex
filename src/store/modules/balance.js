@@ -30,24 +30,30 @@ const balanceStore = {
         totalBalance: ({ list }) => Object.values(list).reduce( (acc, item) => (acc + item.value), 0),
     },
     mutations: {
-        ADD_USER ({ list }, user) {
+        ADD_ITEM ({ list }, user) {
             Vue.set(list, user.id, user);
         },
-        DELETE_USER ({ list }, id) {
+        DELETE_ITEM ({ list }, id) {
             Vue.delete(list, id);
         }
     },
     actions: {
-        addNewUser({ commit }, user) {
-            const newUser = {
-                ...user, 
+        addNewItem({ commit }, data) {
+            const newItem = {
+                ...data, 
                 id: String(Math.random())
             };
-            newUser.value = checkValue(newUser);
-            commit("ADD_USER", newUser);
+            newItem.value = checkValue(newItem);
+            commit("ADD_ITEM", newItem);
         },
-        deleteUser({ commit }, id){
-            commit("DELETE_USER", id);
+        deleteItem({ commit }, id){
+            commit("DELETE_ITEM", id);
+        },
+        getItem({ state: { list } }, id) {
+            if (list[id]) {
+                return {...list[id]};
+            }
+            return {};
         }
     }
 };

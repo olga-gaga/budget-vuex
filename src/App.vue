@@ -2,15 +2,16 @@
   <div id="app">
     <Form @submitForm="onFormSubmit"/>
     <TotalBalance :changeStyle="changeStyle" :total="totalBalance" />
-    <BudgetList :changeStyle="changeStyle" :list="budgetList" @onDeleteItem="deleteItem"/>
+    <BudgetList :changeStyle="changeStyle" :list="budgetList" @deleteItem="onDeleteItem"/>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 import BudgetList from '@/components/BudgetList.vue';
 import TotalBalance from '@/components/TotalBalance.vue';
 import Form from '@/components/Form.vue';
+
 export default {
   name: 'App',
   components: {
@@ -22,13 +23,13 @@ export default {
     ...mapGetters('balance', ["budgetList", "totalBalance"]),
   },
   methods: {
-    ...mapActions('balance', ["addNewUser", "deleteUser"]),
+    ...mapActions('balance', ["addNewItem", "deleteItem"]),
    onFormSubmit(data){
-      this.addNewUser(data);
+      this.addNewItem(data);
     },
 
-    deleteItem(id) {
-      this.deleteUser(id);
+    onDeleteItem(id) {
+      this.deleteItem(id);
     },
 
     changeStyle(value = 0) {
