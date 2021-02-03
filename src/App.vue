@@ -1,30 +1,34 @@
 <template>
   <div id="app">
-    <Form @submitForm="onFormSubmit"/>
+    <Form @submitForm="onFormSubmit" />
     <TotalBalance :changeStyle="changeStyle" :total="totalBalance" />
-    <BudgetList :changeStyle="changeStyle" :list="budgetList" @deleteItem="onDeleteItem"/>
+    <BudgetList
+      :changeStyle="changeStyle"
+      :list="budgetList"
+      @deleteItem="onDeleteItem"
+    />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import BudgetList from '@/components/BudgetList.vue';
-import TotalBalance from '@/components/TotalBalance.vue';
-import Form from '@/components/Form.vue';
+import { mapActions, mapGetters } from "vuex";
+import BudgetList from "@/components/BudgetList.vue";
+import TotalBalance from "@/components/TotalBalance.vue";
+import Form from "@/components/Form.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     BudgetList,
     TotalBalance,
-    Form,
+    Form
   },
   computed: {
-    ...mapGetters('balance', ["budgetList", "totalBalance"]),
+    ...mapGetters("balance", ["budgetList", "totalBalance"])
   },
   methods: {
-    ...mapActions('balance', ["addNewItem", "deleteItem"]),
-   onFormSubmit(data){
+    ...mapActions("balance", ["addNewItem", "deleteItem"]),
+    onFormSubmit(data) {
       this.addNewItem(data);
     },
 
@@ -35,14 +39,13 @@ export default {
     changeStyle(value = 0) {
       if (value > 0) {
         return "green";
-      }
-      else if (value < 0) {
+      } else if (value < 0) {
         return "red";
       }
       return "black";
-    },
-  }, 
-}
+    }
+  }
+};
 </script>
 
 <style>
